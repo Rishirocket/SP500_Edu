@@ -1,11 +1,9 @@
 name: SP500 Options Telegram Bot
 
-on:
+"on":
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: "*/5 * * * *"
   workflow_dispatch:
-
-jobs:
   scan:
     runs-on: ubuntu-latest
     timeout-minutes: 10

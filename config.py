@@ -37,7 +37,7 @@ WHITELIST = [
     "NET", "RBRK", "OKTA",
 
     # Biotech / Genomics
-    "XBI", "ARKG", "TEM",
+    "TEM",
     "BEAM", "TWST", "MRNA",
 
     # Homebuilders

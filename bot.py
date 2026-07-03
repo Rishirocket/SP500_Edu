@@ -472,6 +472,9 @@ def main():
     print(f"Running {len(batch)} tickers:")
     print(batch)
 
+    # TEST TELEGRAM
+    send_alert("✅ Telegram test from GitHub Actions")
+
     total_alerts = 0
 
     for ticker in batch:

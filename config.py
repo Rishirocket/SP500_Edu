@@ -1,89 +1,60 @@
-"""Configuration for the volume-first structural breakout bot."""
+"""Configuration for the adaptive multi-pattern stock scanner.
 
-WHITELIST = [
-    # Mega Cap / AI Leaders
-    "MSFT", "NVDA", "AAPL", "AMZN", "GOOGL", "GOOG",
-    "META", "AVGO", "TSLA",
+Telegram credentials should remain in GitHub Secrets / environment variables:
+TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID.
+"""
 
-    # Financials / Payments
-    "JPM", "V", "MA", "BAC",
-    "AFRM", "SEZL", "XYZ", "UPST", "SOFI",
-
-    # Consumer / Retail
-    "WMT", "COST", "HD", "KO",
-
-    # Healthcare / Pharma
-    "LLY", "JNJ", "ABBV", "UNH", "OSCR", "HIMS",
-
-    # Technology / Software
-    "ORCL", "CRM", "NFLX", "DDOG", "SNOW", "FROG", "TTWO",
-
-    # Semiconductors
-    "AMD", "QCOM",
-
-    # Energy
-    "XOM", "CVX",
-
-    # Telecom
-    "TMUS",
-
-    # AI / Growth / Momentum
-    "PLTR", "RGTI", "LUNR", "HOOD", "SHOP", "LMND", "RDDT",
-
-    # Cybersecurity
-    "PANW", "CRWD", "FTNT", "NET", "RBRK", "OKTA",
-
-    # Biotech / Genomics
-    "TEM", "BEAM", "TWST", "MRNA",
-
-    # Homebuilders
-    "DHI", "TOL", "PHM",
-
-    # Crypto / Data Center / Compute
-    "HUT", "MARA", "RIOT", "CLSK",
-
-    # Misc Growth
-    "GRRR",
-]
-
-BLACKLIST = []
-
-# Scan the complete whitelist. The earlier limit of 60 silently omitted names.
-MAX_TICKERS_PER_RUN = 100
-SLEEP_BETWEEN_TICKERS = 0.5
 DATA_DIR = "data"
 
-# Liquidity universe
-MIN_PRICE = 10
-MAX_PRICE = 1000
-MIN_DOLLAR_VOLUME = 20_000_000
+# Stocks scanned on every run. Edit this list whenever needed.
+WHITELIST = [
+    "SPY", "QQQ", "AAPL", "MSFT", "NVDA", "AMZN", "META", "GOOGL",
+    "AVGO", "TSLA", "AMD", "QCOM", "MU", "ARM", "SMCI", "ORCL",
+    "CRM", "NFLX", "PLTR", "APP", "CRWD", "DELL", "INTC", "MRVL",
+    "JPM", "BAC", "GS", "V", "MA", "SOFI", "HOOD", "COIN",
+    "LLY", "UNH", "ABBV", "MRK", "JNJ", "HIMS", "OSCR", "NVO",
+    "RKLB", "ASTS", "LUNR", "IONQ", "RGTI", "QBTS", "QUBT", "SOUN",
+    "ONDS", "TEM", "EOSE", "BE", "RUN", "UBER", "AAL", "JBLU",
+    "XOM", "CVX", "NEE", "GE", "HON", "WMT", "COST", "TGT",
+    "RDDT", "SNOW", "SHOP", "PANW", "MSTR", "MARA", "RIOT",
+]
+BLACKLIST = []
 
-# Volume is the primary breakout confirmation.
-# 2.0 means the completed 15-minute breakout candle must have twice the
-# average volume of the same 15-minute time slot over prior sessions.
-MIN_SAME_TIME_RVOL = 2.0
+# Runtime controls
+MAX_TICKERS_PER_RUN = 75
+SLEEP_BETWEEN_TICKERS = 0.20
 
-# Daily accumulation/distribution filter.
-MIN_UP_DOWN_RATIO = 1.20
+# Liquidity and price filters
+MIN_PRICE = 3.00
+MAX_PRICE = 1500.00
+MIN_DOLLAR_VOLUME = 8_000_000
 
-# One-hour structural support/resistance detection.
-# A valid level needs repeated, separated pivot tests within 0.25 ATR.
+# Breakout and volume requirements. These are intentionally moderate so the
+# scanner ranks candidates rather than rejecting nearly everything.
+MIN_SAME_TIME_RVOL = 1.20
+MIN_UP_DOWN_RATIO = 1.05
+LEVEL_TOLERANCE_ATR = 0.35
 LEVEL_LOOKBACK_BARS = 160
 MIN_LEVEL_TOUCHES = 2
-LEVEL_TOLERANCE_ATR = 0.25
+BREAKOUT_BUFFER_ATR = 0.00
 
-# Entry must close beyond the structural zone by this volatility buffer.
-BREAKOUT_BUFFER_ATR = 0.05
-
-# Risk and exits
+# Trade-plan controls
 STOP_BUFFER_ATR = 0.10
-MAX_STOP_PCT = 1.00
-PT1_PCT = 2.00
+MAX_STOP_PCT = 4.00
+PT1_PCT = 1.50
 PT2_PCT = 3.00
-MIN_RR_TO_PT1 = 2.00
+MIN_RR_TO_PT1 = 1.20
+MIN_DAILY_ATR_PCT = 0.70
+MIN_3DAY_CAPACITY_PCT = 1.25
+TARGET_OBSTACLE_BUFFER_ATR = 0.10
+MIN_PT2_PCT = 1.75
 
-# A 2-3% target must be feasible, not merely printed on the alert.
-MIN_DAILY_ATR_PCT = 1.20
-MIN_3DAY_CAPACITY_PCT = 2.00
-TARGET_OBSTACLE_BUFFER_ATR = 0.15
-MIN_PT2_PCT = 2.25
+# Adaptive two-year behavior model
+HISTORY_PERIOD = "2y"
+MIN_SETUP_SCORE = 66.0
+MIN_WATCH_SCORE = 54.0
+WATCH_DISTANCE_PCT = 2.00
+SEND_WATCH_ALERTS = True
+MIN_BEHAVIOR_SAMPLES = 8
+MIN_HISTORICAL_WIN_RATE = 0.45
+BEHAVIOR_FORWARD_DAYS = 3
